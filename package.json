@@ -1,16 +1,16 @@
 {
-  "name": "react-template",
+  "name": "memory-game",
   "version": "1.0.0",
-  "description": "webpack template for React frontend.",
-  "main": "index.js",
-  "repository": "git@github.com:dilipt/react-template.git",
+  "description": "find and match tiles.",
+  "main": "index.tsx",
+  "repository": "git@github.com:dilipt/memory-game.git",
   "author": "Dilip Thomas <dthomas84@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
     "start": "webpack serve --config ./webpack.config.js",
     "build": "webpack",
-    "test": "jest ./src"
+    "test": "jest ./src --passWithNoTests"
   },
   "dependencies": {
     "react": "^17.0.2",
