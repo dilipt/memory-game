@@ -1,11 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { theme } from './theme';
 
 const Container = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   & > *:not(:last-child) {
     margin-bottom: 20px;
   }
@@ -13,13 +15,15 @@ const Container = styled.article`
 
 export function App() {
   return (
-    <Container>
-      <header>
-        <h1>Oh, the Memories</h1>
-      </header>
-      <article>
-        Feel free to add some content here.
-      </article>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container>
+        <header>
+          <h1>Oh, the Memories</h1>
+        </header>
+        <article>
+          Feel free to add some content here.
+        </article>
+      </Container>
+    </ThemeProvider>
   );
 }
