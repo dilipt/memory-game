@@ -9,19 +9,6 @@ function shuffle(list: number[]): number[] {
   return copy;
 }
 
-function squarify(arr: number[]): number[][] {
-  const length = Math.sqrt(arr.length);
-  const result: number[][] = [];
-  for (let i = 0; i < length; i += 1) {
-    const row = [];
-    for (let j = 0; j < length; j += 1) {
-      row.push(arr[(i * length) + j]);
-    }
-    result.push(row);
-  }
-  return result;
-}
-
 function pairify(size: number = 8): number[] {
   const arr: number[] = [];
   for (let i = 1; i <= size; i += 1) {
@@ -31,6 +18,6 @@ function pairify(size: number = 8): number[] {
   return arr;
 }
 
-export function createBoard(size: number = 8): number[][] {
-  return squarify(shuffle(pairify(size)));
+export function createBoard(size: number = 8): number[] {
+  return shuffle(pairify(size));
 }

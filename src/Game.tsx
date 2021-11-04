@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Board } from './Board';
 import { Header } from './Header';
-import { createBoard } from './util';
 
 const Container = styled.article`
   display: flex;
@@ -11,16 +10,15 @@ const Container = styled.article`
   align-items: center;
 
   & > *:not(:last-child) {
-    margin-bottom: 20px;
+    margin-bottom: 3rem;
   }
 `;
 
 export function Game() {
-  const [gameBoard] = useState<number[][]>(createBoard(8));
   return (
     <Container>
       <Header />
-      <Board board={gameBoard} />
+      <Board />
     </Container>
   );
 }
