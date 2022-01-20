@@ -1,36 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Tile } from './Tile';
-import { createBoard } from './util';
-
-const MATCH_COUNT = 8;
+import { RootState } from './store/store';
 
 export function Board() {
-  const [gameState, setGameState] = useState<number[]>(createBoard(MATCH_COUNT));
-  const [selectedTiles, setSelectedTiles] = useState<Array<number>>([]);
-
-  const selectHandler = (value: number) => {
-    if (selectedTiles.length === 2) {
-      setSelectedTiles([]);
-    } else {
-      setSelectedTiles([...selectedTiles, value]);
-    }
-  };
-
-  useEffect(() => {
-    if (selectedTiles.length === 2) {
-      if (selectedTiles[0] === selectedTiles[1]) {
-        setGameState((oldState) => oldState.map((value) => (value === selectedTiles[0] ? 0 : value)));
-      }
-    }
-  }, [selectedTiles]);
+  const { board } = useSelector((state: RootState) => state.game);
 
   function renderRow(start: number, endExclusive: number) {
     return (
       <tr>
         {
-          gameState.slice(start, endExclusive)
+          board.slice(start, endExclusive)
             .map((value) => (
-              <td><Tile value={value} selectHandler={selectHandler} selectCount={selectedTiles.length} /></td>
+              <td><Tile value={value} /></td>
             ))
         }
       </tr>

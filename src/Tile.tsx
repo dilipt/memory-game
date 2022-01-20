@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-type TileProps = {
-  value: number,
-  selectHandler: Function,
-  selectCount: number,
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { tileSelected } from './store/game-slice';
+import { RootState } from './store/store';
 
 type StyleProps = {
   selected: boolean,
@@ -24,23 +21,36 @@ const Container = styled.div<StyleProps>`
   cursor: pointer;
 `;
 
-export function Tile({ value, selectHandler, selectCount }: TileProps) {
+type TileProps = {
+  value: number,
+};
+
+export function Tile({ value }: TileProps) {
+  const { hideAll, matchedNumbers } = useSelector((state: RootState) => state.game);
   const [selected, setSelected] = useState<boolean>(false);
+  const [matched, setMatched] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const toggleSelected = () => {
     if (!selected) {
-      selectHandler(value);
+      dispatch(tileSelected({ tile: value }));
     }
     setSelected(!selected);
   };
 
   useEffect(() => {
-    if (selectCount === 0) {
-      setSelected(false);
+    let handle: number;
+    if (hideAll) {
+      handle = window.setTimeout(() => setSelected(false), 1000);
     }
-  }, [selectCount]);
+    return () => clearTimeout(handle);
+  }, [hideAll]);
+
+  useEffect(() => {
+    setMatched(matchedNumbers.some((n) => n === value));
+  }, [matchedNumbers]);
 
   return (
-    <Container onClick={toggleSelected} selected={selected} matched={value === 0}>{value}</Container>
+    <Container onClick={toggleSelected} selected={selected} matched={matched}>{value}</Container>
   );
 }

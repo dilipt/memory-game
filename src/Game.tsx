@@ -17,7 +17,7 @@ const Container = styled.article`
 export function Game() {
   return (
     <Container>
-      <Header />
+      <Header>Oh, the Memories!</Header>
       <Board />
     </Container>
   );

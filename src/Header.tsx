@@ -1,9 +1,13 @@
 import React from 'react';
 
-export function Header() {
+type HeaderProps = {
+  children: string,
+};
+
+export function Header({ children }: HeaderProps) {
   return (
     <header>
-      <h1>Oh, the Memories!</h1>
+      <h1>{children}</h1>
     </header>
   );
 }
