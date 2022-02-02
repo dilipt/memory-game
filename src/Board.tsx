@@ -12,7 +12,7 @@ export function Board() {
         {
           board.slice(start, endExclusive)
             .map((value) => (
-              <td><Tile value={value} /></td>
+              <td key={Math.random()}><Tile value={value} /></td>
             ))
         }
       </tr>
