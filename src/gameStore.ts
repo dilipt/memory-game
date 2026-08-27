@@ -1,48 +1,85 @@
-import { create } from 'zustand';
-import { createBoard } from './util';
+import { create } from "zustand";
+import { createBoard } from "./util";
 
 type GameStore = {
   board: number[];
   matchedCards: number[];
-  selectedCard: number | null;
+  selectedCards: number[];
+  matchedPending: number[];
   initialise: () => void;
   cardSelected: (idx: number) => void;
-}
+};
 
 const useGameStore = create<GameStore>((set) => ({
   board: createBoard(),
   matchedCards: [],
-  selectedCard: null,
+  selectedCards: [],
+  matchedPending: [],
 
   initialise: () => {
-    set({ board: createBoard(), matchedCards: [], selectedCard: null });
+    set({
+      board: createBoard(),
+      matchedCards: [],
+      selectedCards: [],
+      matchedPending: [],
+    });
   },
 
-  cardSelected: (idx: number) => set(state => {
-    if (state.selectedCard === null) {
-      return ({
-        selectedCard: idx,
-      });
-    } else if (state.selectedCard === idx) {
-      return ({
-        selectedCard: null,
-      });
-    } else {
-      if (state.board[state.selectedCard] === state.board[idx] && state.selectedCard !== idx) {
-        return ({
-          selectedCard: null,
-          matchedCards: [...state.matchedCards, state.board[idx]],
-        });
-      } else {
-        return ({
-          selectedCard: null,
-        });
+  cardSelected: (selectedIdx: number) =>
+    set((state) => {
+      if (state.matchedCards.includes(state.board[selectedIdx])) {
+        return state;
       }
-    }
-  }),
 
+      if (state.selectedCards.includes(selectedIdx)) {
+        return state;
+      }
+
+      if (state.selectedCards.length === 0) {
+        return {
+          selectedCards: [selectedIdx],
+        };
+      }
+
+      if (state.selectedCards.length === 1) {
+        const firstSelection = state.board[state.selectedCards[0]];
+        const secondSelection = state.board[selectedIdx];
+
+        if (firstSelection === secondSelection) {
+          const matchedValue = state.board[selectedIdx];
+
+          setTimeout(() => {
+            set((currentState) => ({
+              matchedCards: [...currentState.matchedCards, matchedValue],
+              matchedPending: currentState.matchedPending.filter(
+                (value) => value !== matchedValue,
+              ),
+            }));
+          }, 600);
+
+          return {
+            selectedCards: [],
+            matchedPending: [...state.matchedPending, matchedValue],
+          };
+        }
+
+        const nextSelected = [...state.selectedCards, selectedIdx];
+
+        setTimeout(() => {
+          set((currentState) => ({
+            selectedCards: currentState.selectedCards.filter(
+              (selectedIdx) => !nextSelected.includes(selectedIdx),
+            ),
+          }));
+        }, 600);
+
+        return {
+          selectedCards: nextSelected,
+        };
+      }
+
+      return state;
+    }),
 }));
 
-export {
-  useGameStore,
-};
+export { useGameStore };
